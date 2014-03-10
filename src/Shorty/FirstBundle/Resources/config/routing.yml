@@ -1,3 +1,11 @@
 first_homepage:
     pattern:  /hello/{name}
     defaults: { _controller: FirstBundle:Default:index }
+
+test:
+    pattern: /test
+    defaults: { _controller: FirstBundle:Default:test }
+
+form:
+    pattern: /form
+    defaults: { _controller: FirstBundle:Default:form }
