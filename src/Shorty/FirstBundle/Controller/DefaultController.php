@@ -37,7 +37,7 @@ class DefaultController extends Controller
 
         if ($form->isValid()) {
             // fait quelque chose comme sauvegarder la tâche dans la bdd
-            return $this->redirect('task_success');
+            return $this->redirect('task_success',array('toto'=>'titi'));
         } else {
             return $this->render('FirstBundle:Form:index.html.twig', array(
                 'form' => $form->createView(),
@@ -54,6 +54,7 @@ class DefaultController extends Controller
         return $this->render('FirstBundle:Form:success.html.twig');
     }
 
+    //methode de creation de formulaire (si on veut l'utiliser dans un post et un get par exemple
     private function createShortenedUrlForm($task)
     {
         return $this->createFormBuilder($task)
