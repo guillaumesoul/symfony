@@ -3,6 +3,8 @@
 namespace Shorty\FirstBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Shorty\FirstBundle\Entity\Task;
+use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
 {
@@ -17,9 +19,71 @@ class DefaultController extends Controller
         return $this->render('FirstBundle:Test:index.html.twig');
     }
 
-    public function formAction()
+    //formulaire
+
+    public function formAction(Request $request)
     {
-        return $this->render('FirstBundle:Form:index.html.twig');
+        // just setup a fresh $task object (remove the dummy data)
+        $task = new Task();
+
+        //$form = $this->createShortenedUrlForm($task);
+        $form = $this->createFormBuilder($task)
+            ->add('task', 'text')
+            ->add('dueDate', 'date')
+            ->add('save', 'submit')
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            // fait quelque chose comme sauvegarder la tâche dans la bdd
+            return $this->redirect('task_success');
+        } else {
+            return $this->render('FirstBundle:Form:index.html.twig', array(
+                'form' => $form->createView(),
+            ));
+        }
+
+
+
+        // ...
     }
+
+    public function successAction()
+    {
+        return $this->render('FirstBundle:Form:success.html.twig');
+    }
+
+    private function createShortenedUrlForm($task)
+    {
+        return $this->createFormBuilder($task)
+            ->add('task', 'text')
+            ->add('dueDate', 'date')
+            ->add('save', 'submit')
+            ->getForm();
+    }
+
+
+    /*
+    public function formAction(Request $request)
+    {
+        // crée une tâche et lui donne quelques données par défaut pour cet exemple
+        $task = new Task();
+        $task->setTask('Write a blog post');
+        $task->setDueDate(new \DateTime('tomorrow'));
+
+        $form = $this->createFormBuilder($task)
+            ->add('task', 'text')
+            ->add('dueDate', 'date')
+            ->add('save', 'submit')
+            ->getForm();
+
+        return $this->render('FirstBundle:Form:index.html.twig', array(
+            'form' => $form->createView(),
+        ));
+    }
+    */
+
+
 
 }

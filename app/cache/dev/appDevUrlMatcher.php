@@ -150,6 +150,11 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
             return array (  '_controller' => 'Shorty\\FirstBundle\\Controller\\DefaultController::formAction',  '_route' => 'form',);
         }
 
+        // task_success
+        if ($pathinfo === '/task_success') {
+            return array (  '_controller' => 'Shorty\\FirstBundle\\Controller\\DefaultController::successAction',  '_route' => 'task_success',);
+        }
+
         // _welcome
         if (rtrim($pathinfo, '/') === '') {
             if (substr($pathinfo, -1) !== '/') {

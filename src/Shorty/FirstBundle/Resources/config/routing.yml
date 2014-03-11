@@ -9,3 +9,7 @@ test:
 form:
     pattern: /form
     defaults: { _controller: FirstBundle:Default:form }
+
+task_success:
+  pattern: /task_success
+  defaults: { _controller: FirstBundle:Default:success }
