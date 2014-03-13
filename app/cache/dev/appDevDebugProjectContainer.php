@@ -171,6 +171,8 @@ class appDevDebugProjectContainer extends Container
             'session.storage.native' => 'getSession_Storage_NativeService',
             'session.storage.php_bridge' => 'getSession_Storage_PhpBridgeService',
             'session_listener' => 'getSessionListenerService',
+            'shorty.hashsluggenerator' => 'getShorty_HashsluggeneratorService',
+            'shorty.sha1' => 'getShorty_Sha1Service',
             'streamed_response_listener' => 'getStreamedResponseListenerService',
             'swiftmailer.email_sender.listener' => 'getSwiftmailer_EmailSender_ListenerService',
             'swiftmailer.mailer.default' => 'getSwiftmailer_Mailer_DefaultService',
@@ -590,7 +592,7 @@ class appDevDebugProjectContainer extends Container
         $b = new \Doctrine\DBAL\Configuration();
         $b->setSQLLogger($a);
 
-        return $this->services['doctrine.dbal.default_connection'] = $this->get('doctrine.dbal.connection_factory')->createConnection(array('driver' => 'pdo_mysql', 'host' => '127.0.0.1', 'port' => NULL, 'dbname' => 'symfony', 'user' => 'root', 'password' => NULL, 'charset' => 'UTF8', 'driverOptions' => array()), $b, new \Symfony\Bridge\Doctrine\ContainerAwareEventManager($this), array());
+        return $this->services['doctrine.dbal.default_connection'] = $this->get('doctrine.dbal.connection_factory')->createConnection(array('driver' => 'pdo_mysql', 'host' => '127.0.0.1', 'port' => NULL, 'dbname' => 'symfony', 'user' => 'root', 'password' => 'bitnami', 'charset' => 'UTF8', 'driverOptions' => array()), $b, new \Symfony\Bridge\Doctrine\ContainerAwareEventManager($this), array());
     }
 
     /**
@@ -612,7 +614,7 @@ class appDevDebugProjectContainer extends Container
         $c = new \Doctrine\Common\Cache\ArrayCache();
         $c->setNamespace('sf2orm_default_bf9b705d31e4883143ae4db1b02b980712d36dbde144483b5f74745240c6c7a9');
 
-        $d = new \Doctrine\ORM\Mapping\Driver\SimplifiedYamlDriver(array('/Applications/mampstack-5.4.23-0/apache2/htdocs/symfony/src/Shorty/FirstBundle/Resources/config/doctrine' => 'Shorty\\FirstBundle\\Entity'));
+        $d = new \Doctrine\ORM\Mapping\Driver\SimplifiedXmlDriver(array('/Applications/mampstack-5.4.23-0/apache2/htdocs/symfony/src/Shorty/FirstBundle/Resources/config/doctrine' => 'Shorty\\FirstBundle\\Entity'));
         $d->setGlobalBasename('mapping');
 
         $e = new \Doctrine\ORM\Mapping\Driver\DriverChain();
@@ -2136,6 +2138,32 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
+     * Gets the 'shorty.hashsluggenerator' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Shorty\FirstBundle\Services\HashSlugGenerator A Shorty\FirstBundle\Services\HashSlugGenerator instance.
+     */
+    protected function getShorty_HashsluggeneratorService()
+    {
+        return $this->services['shorty.hashsluggenerator'] = new \Shorty\FirstBundle\Services\HashSlugGenerator($this->get('shorty.sha1'));
+    }
+
+    /**
+     * Gets the 'shorty.sha1' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Shorty\FirstBundle\Services\Sha1 A Shorty\FirstBundle\Services\Sha1 instance.
+     */
+    protected function getShorty_Sha1Service()
+    {
+        return $this->services['shorty.sha1'] = new \Shorty\FirstBundle\Services\Sha1();
+    }
+
+    /**
      * Gets the 'streamed_response_listener' service.
      *
      * This service is shared.
@@ -3367,7 +3395,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getValidator_Mapping_ClassMetadataFactoryService()
     {
-        return $this->services['validator.mapping.class_metadata_factory'] = new \Symfony\Component\Validator\Mapping\ClassMetadataFactory(new \Symfony\Component\Validator\Mapping\Loader\LoaderChain(array(0 => new \Symfony\Component\Validator\Mapping\Loader\AnnotationLoader($this->get('annotation_reader')), 1 => new \Symfony\Component\Validator\Mapping\Loader\StaticMethodLoader(), 2 => new \Symfony\Component\Validator\Mapping\Loader\XmlFilesLoader(array(0 => '/Applications/mampstack-5.4.23-0/apache2/htdocs/symfony/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/config/validation.xml')), 3 => new \Symfony\Component\Validator\Mapping\Loader\YamlFilesLoader(array()))), NULL);
+        return $this->services['validator.mapping.class_metadata_factory'] = new \Symfony\Component\Validator\Mapping\ClassMetadataFactory(new \Symfony\Component\Validator\Mapping\Loader\LoaderChain(array(0 => new \Symfony\Component\Validator\Mapping\Loader\AnnotationLoader($this->get('annotation_reader')), 1 => new \Symfony\Component\Validator\Mapping\Loader\StaticMethodLoader(), 2 => new \Symfony\Component\Validator\Mapping\Loader\XmlFilesLoader(array(0 => '/Applications/mampstack-5.4.23-0/apache2/htdocs/symfony/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/config/validation.xml')), 3 => new \Symfony\Component\Validator\Mapping\Loader\YamlFilesLoader(array(0 => '/Applications/mampstack-5.4.23-0/apache2/htdocs/symfony/src/Shorty/FirstBundle/Resources/config/validation.yml')))), NULL);
     }
 
     /**
@@ -3449,7 +3477,7 @@ class appDevDebugProjectContainer extends Container
             'database_port' => NULL,
             'database_name' => 'symfony',
             'database_user' => 'root',
-            'database_password' => NULL,
+            'database_password' => 'bitnami',
             'mailer_transport' => 'smtp',
             'mailer_host' => '127.0.0.1',
             'mailer_user' => NULL,
@@ -3595,7 +3623,7 @@ class appDevDebugProjectContainer extends Container
                 0 => '/Applications/mampstack-5.4.23-0/apache2/htdocs/symfony/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/config/validation.xml',
             ),
             'validator.mapping.loader.yaml_files_loader.mapping_files' => array(
-
+                0 => '/Applications/mampstack-5.4.23-0/apache2/htdocs/symfony/src/Shorty/FirstBundle/Resources/config/validation.yml',
             ),
             'validator.expression.class' => 'Symfony\\Component\\Validator\\Constraints\\ExpressionValidator',
             'validator.translation_domain' => 'validators',
@@ -3872,8 +3900,8 @@ class appDevDebugProjectContainer extends Container
 
             ),
             'assetic.java.bin' => '/usr/bin/java',
-            'assetic.node.bin' => '/usr/bin/node',
-            'assetic.ruby.bin' => '/Applications/mampstack-5.4.23-0/ruby/bin/ruby',
+            'assetic.node.bin' => '/usr/local/bin/node',
+            'assetic.ruby.bin' => '/usr/bin/ruby',
             'assetic.sass.bin' => '/usr/bin/sass',
             'assetic.filter.cssrewrite.class' => 'Assetic\\Filter\\CssRewriteFilter',
             'assetic.twig_extension.functions' => array(

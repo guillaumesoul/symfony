@@ -10,6 +10,6 @@ namespace Shorty\FirstBundle\Services;
 // Declaration de l'interface 'iTemplate'
 interface SlugGeneratorInterface
 {
-    public function generateSlug();
+    public function generateSlug($url);
 }
 

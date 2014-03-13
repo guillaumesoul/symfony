@@ -2,15 +2,27 @@
 
 namespace Shorty\FirstBundle\Controller;
 
+use Shorty\FirstBundle\Entity\ShortenedUrl;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Shorty\FirstBundle\Entity\Task;
 use Symfony\Component\HttpFoundation\Request;
+use Shorty\FirstBundle\Services\HashSlugGenerator;
+use Shorty\FirstBundle\Services\Sha1;
+use Shorty\FirstBundle\Services\Md5;
 
 class DefaultController extends Controller
 {
 
     public function indexAction($name)
     {
+        //$slugGenerator = new HashSlugGenerator(new Sha1());
+        //var_dump($slugGenerator->generateSlug('www.google.com'));
+        //$slugGenerator2 = new HashSlugGenerator(new Md5());
+        //var_dump($slugGenerator2->generateSlug('www.google.com'));
+
+        $slugGenerator = $this->get("shorty.hashsluggenerator");
+        var_dump($slugGenerator->generateSlug('www.google.com'));
+
         return $this->render('FirstBundle:Default:index.html.twig', array('name' => $name));
     }
 
@@ -24,10 +36,10 @@ class DefaultController extends Controller
     public function formAction(Request $request)
     {
         // just setup a fresh $task object (remove the dummy data)
-        $task = new Task();
+        $shortenedurl = new ShortenedUrl();
 
         //$form = $this->createShortenedUrlForm($task);
-        $form = $this->createFormBuilder($task)
+        $form = $this->createFormBuilder($shortenedurl)
             ->add('task', 'text')
             ->add('dueDate', 'date')
             ->add('save', 'submit')
@@ -36,7 +48,8 @@ class DefaultController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            // fait quelque chose comme sauvegarder la tâche dans la bdd
+            $this->getDoctrine()->getManager()->persist($shortenedurl);
+            $this->getDoctrine()->getManager()->flush($shortenedurl);
             return $this->redirect('task_success',array('toto'=>'titi'));
         } else {
             return $this->render('FirstBundle:Form:index.html.twig', array(

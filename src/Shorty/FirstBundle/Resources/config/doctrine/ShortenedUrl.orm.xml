@@ -1,0 +1,21 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                    http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Shorty\FirstBundle\Entity\ShortenedUrl" table="shortened_url">
+
+        <unique-constraints>
+            <unique-constraint columns="slug,originalUrl" name="search_idx" />
+        </unique-constraints>
+
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+        </id>
+
+        <field name="slug" column="slug" type="string"/>
+        <field name="originalUrl" column="originalUrl" type="string"/>
+
+    </entity>
+
+</doctrine-mapping>

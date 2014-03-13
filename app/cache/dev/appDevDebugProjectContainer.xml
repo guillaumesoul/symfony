@@ -29,7 +29,7 @@
     <parameter key="database_port">null</parameter>
     <parameter key="database_name">symfony</parameter>
     <parameter key="database_user">root</parameter>
-    <parameter key="database_password">null</parameter>
+    <parameter key="database_password">bitnami</parameter>
     <parameter key="mailer_transport">smtp</parameter>
     <parameter key="mailer_host">127.0.0.1</parameter>
     <parameter key="mailer_user">null</parameter>
@@ -168,7 +168,9 @@
     <parameter key="validator.mapping.loader.xml_files_loader.mapping_files" type="collection">
       <parameter>/Applications/mampstack-5.4.23-0/apache2/htdocs/symfony/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/config/validation.xml</parameter>
     </parameter>
-    <parameter key="validator.mapping.loader.yaml_files_loader.mapping_files" type="collection"/>
+    <parameter key="validator.mapping.loader.yaml_files_loader.mapping_files" type="collection">
+      <parameter>/Applications/mampstack-5.4.23-0/apache2/htdocs/symfony/src/Shorty/FirstBundle/Resources/config/validation.yml</parameter>
+    </parameter>
     <parameter key="validator.expression.class">Symfony\Component\Validator\Constraints\ExpressionValidator</parameter>
     <parameter key="validator.translation_domain">validators</parameter>
     <parameter key="fragment.listener.class">Symfony\Component\HttpKernel\EventListener\FragmentListener</parameter>
@@ -434,8 +436,8 @@
     <parameter key="assetic.write_to">/Applications/mampstack-5.4.23-0/apache2/htdocs/symfony/app/../web</parameter>
     <parameter key="assetic.variables" type="collection"/>
     <parameter key="assetic.java.bin">/usr/bin/java</parameter>
-    <parameter key="assetic.node.bin">/usr/bin/node</parameter>
-    <parameter key="assetic.ruby.bin">/Applications/mampstack-5.4.23-0/ruby/bin/ruby</parameter>
+    <parameter key="assetic.node.bin">/usr/local/bin/node</parameter>
+    <parameter key="assetic.ruby.bin">/usr/bin/ruby</parameter>
     <parameter key="assetic.sass.bin">/usr/bin/sass</parameter>
     <parameter key="assetic.filter.cssrewrite.class">Assetic\Filter\CssRewriteFilter</parameter>
     <parameter key="assetic.twig_extension.functions" type="collection"/>
@@ -1401,7 +1403,9 @@
             </argument>
             <argument type="service">
               <service class="Symfony\Component\Validator\Mapping\Loader\YamlFilesLoader" public="false">
-                <argument type="collection"/>
+                <argument type="collection">
+                  <argument>/Applications/mampstack-5.4.23-0/apache2/htdocs/symfony/src/Shorty/FirstBundle/Resources/config/validation.yml</argument>
+                </argument>
               </service>
             </argument>
           </argument>
@@ -2251,7 +2255,7 @@
         <argument key="port">null</argument>
         <argument key="dbname">symfony</argument>
         <argument key="user">root</argument>
-        <argument key="password">null</argument>
+        <argument key="password">bitnami</argument>
         <argument key="charset">UTF8</argument>
         <argument key="driverOptions" type="collection"/>
       </argument>
@@ -2345,7 +2349,7 @@
               <service class="Doctrine\ORM\Mapping\Driver\DriverChain" public="false">
                 <call method="addDriver">
                   <argument type="service">
-                    <service class="Doctrine\ORM\Mapping\Driver\SimplifiedYamlDriver" public="false">
+                    <service class="Doctrine\ORM\Mapping\Driver\SimplifiedXmlDriver" public="false">
                       <argument type="collection">
                         <argument key="/Applications/mampstack-5.4.23-0/apache2/htdocs/symfony/src/Shorty/FirstBundle/Resources/config/doctrine">Shorty\FirstBundle\Entity</argument>
                       </argument>
@@ -2428,6 +2432,10 @@
       </argument>
       <argument type="service" id="security.authentication.trust_resolver" on-invalid="null"/>
       <argument type="service" id="security.role_hierarchy" on-invalid="null"/>
+    </service>
+    <service id="shorty.sha1" class="Shorty\FirstBundle\Services\Sha1"/>
+    <service id="shorty.hashsluggenerator" class="Shorty\FirstBundle\Services\HashSlugGenerator">
+      <argument type="service" id="shorty.sha1"/>
     </service>
     <service id="twig.extension.acme.demo" class="Acme\DemoBundle\Twig\Extension\DemoExtension" public="false">
       <tag name="twig.extension"/>
